@@ -175,6 +175,7 @@ jobs:
       - store_artifacts:
           path: _build/test/logs
 
+
   eunit:
     <<: *container_config
     steps:
@@ -373,6 +374,13 @@ jobs:
       - DEPLOY_ENV: uat
     steps: *deploy_steps
 
+
+  deploy_aws_dev:
+    <<: *container_config
+    environment:
+      - DEPLOY_ENV: dev_aws
+    steps: *deploy_steps
+
   github_release_osx:
     <<: *container_config
     steps:
@@ -516,6 +524,10 @@ workflows:
               ignore: /.*/
             tags:
               only: /^v.*$/
+
+      - deploy_aws_dev:
+          requires:
+            - linux_package
 
       - deploy_uat:
           requires:
